@@ -13,9 +13,16 @@
 <div *ngFor="let task of filteredTasks" class="mb-4 p-4 border border-gray-300 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-200">
   <h3 class="text-xl font-semibold text-gray-800">{{ task.nameTask }}</h3>
   <p class="text-gray-600">Fecha límite: <span class="font-medium text-gray-800">{{ task.limitDate }}</span></p>
-  <p class="text-gray-600">Asignado a: <span class="font-medium text-gray-800">{{ task.person?.namePerson }} (Edad: {{ task.person?.age }})</span></p>
-  <p class="text-gray-600">Habilidades: <span class="font-medium text-gray-800">{{ task.person?.habilities }}</span></p>
   
+  <div class="text-gray-600">
+    <h4 class="font-medium">Personas Asignadas:</h4>
+    <ul>
+      <li *ngFor="let person of task.people">
+        <span class="font-medium text-gray-800">{{ person.namePerson }} (Edad: {{ person.age }}, Habilidades: {{ person.habilities }})</span>
+      </li>
+    </ul>
+  </div>
+
   <div class="flex items-center mt-4">
     <input type="checkbox" 
            [checked]="task.completed" 

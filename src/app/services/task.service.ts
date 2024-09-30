@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Task } from './models/task.model';
+import { Task } from '../models/task.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +17,7 @@ export class TaskService {
 
   private loadTasks() {
     const storedTasks = localStorage.getItem('tasks');
+    
     this.tasks = storedTasks ? JSON.parse(storedTasks) : [];
   }
 
@@ -25,7 +26,7 @@ export class TaskService {
   }
 
   addTask(task: Task) {
-    task.id = this.tasks.length + 1;
+    task.id = this.tasks.length + 1; 
     this.tasks.push(task);
     this.saveTasks();
   }

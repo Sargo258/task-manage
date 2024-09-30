@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TaskService } from '../task.service';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { TaskService } from '../services/task.service';
 import { Task, Person } from '../models/task.model';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,12 +20,25 @@ export class TaskFormComponent {
       nameTask: ['', Validators.required],
       limitDate: ['', Validators.required],
       completed: [false],
-      person: this.fb.group({
-        namePerson: ['', Validators.required],
-        age: ['', [Validators.required, Validators.min(18)]],
-        habilities: ['', Validators.required],
-      }),
+      people: this.fb.array([]), // Cambia aquí
     });
+  }
+
+  get people(): FormArray {
+    return this.taskForm.get('people') as FormArray; // Acceso al FormArray
+  }
+
+  addPerson() {
+    const personForm = this.fb.group({
+      namePerson: ['', Validators.required],
+      age: ['', [Validators.required, Validators.min(18)]],
+      habilities: ['', Validators.required],
+    });
+    this.people.push(personForm); // Agrega un nuevo FormGroup para la persona
+  }
+
+  removePerson(index: number) {
+    this.people.removeAt(index); // Elimina la persona del FormArray
   }
 
   onSubmit() {

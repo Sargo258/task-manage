@@ -3,7 +3,7 @@ export interface Task {
     nameTask: string;
     limitDate: string;
     completed: boolean;
-    person?: Person;
+    people: Person[];
   }
 
   export interface Person {
