@@ -9,5 +9,5 @@ export interface Task {
   export interface Person {
     namePerson: string;
     age: number;
-    habilities: string;
+    habilities: string[];
   }

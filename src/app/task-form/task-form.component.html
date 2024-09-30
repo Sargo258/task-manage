@@ -18,30 +18,33 @@
     </div>
 
     <div formArrayName="people" class="mb-4">
-      <h3 class="text-lg font-semibold mb-2">Personas:</h3>
-      <div *ngFor="let person of people.controls; let i = index" [formGroupName]="i" class="border p-4 mb-2 rounded-md">
-        <label class="block text-sm font-medium text-gray-700">Nombre de la Persona:</label>
-        <input formControlName="namePerson" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
-        <div *ngIf="person.get('namePerson')?.invalid && person.get('namePerson')?.touched" class="text-red-600 text-sm">
-          El nombre de la persona es obligatorio.
-        </div>
+        <h3 class="text-lg font-semibold mb-2">Personas Asignadas:</h3>
+        <div *ngFor="let person of people.controls; let i = index" [formGroupName]="i" class="border p-4 mb-2 rounded-md">
+            <label class="block text-sm font-medium text-gray-700">Nombre de la Persona:</label>
+            <input formControlName="namePerson" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
+            <div *ngIf="person.get('namePerson')?.invalid && person.get('namePerson')?.touched" class="text-red-600 text-sm">
+                El nombre de la persona es obligatorio.
+            </div>
+    
+            <label class="block text-sm font-medium text-gray-700 mt-4">Edad:</label>
+            <input type="number" formControlName="age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
+            <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched" class="text-red-600 text-sm">
+                La edad debe ser mayor o igual a 18.
+            </div>
 
-        <label class="block text-sm font-medium text-gray-700 mt-4">Edad:</label>
-        <input type="number" formControlName="age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
-        <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched" class="text-red-600 text-sm">
-          La edad debe ser mayor o igual a 18.
+            <div formArrayName="habilities" class="mb-4">
+                <h4 class="text-md font-semibold mb-2">Habilidades:</h4>
+                <div *ngFor="let hability of getHabilities(i).controls; let j = index" class="mb-2">
+                    <input [formControlName]="j" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
+                    <button type="button" (click)="removeHability(i, j)" class="mt-1 text-red-600 hover:text-red-800">Eliminar Habilidad</button>
+                </div>
+                <button type="button" (click)="addHability(i)" class="mt-2 bg-green-500 text-white py-2 px-4 rounded">Agregar Habilidad</button>
+            </div>
+            
+            <button type="button" (click)="removePerson(i)" class="mt-2 text-red-600 hover:text-red-800">Eliminar Persona</button>
         </div>
-
-        <label class="block text-sm font-medium text-gray-700 mt-4">Habilidades:</label>
-        <input formControlName="habilities" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
-        <div *ngIf="person.get('habilities')?.invalid && person.get('habilities')?.touched" class="text-red-600 text-sm">
-          Las habilidades son obligatorias.
-        </div>
-
-        <button type="button" (click)="removePerson(i)" class="mt-2 text-red-600 hover:text-red-800">Eliminar Persona</button>
-      </div>
-      <button type="button" (click)="addPerson()" class="mt-2 bg-green-500 text-white py-2 px-4 rounded">Agregar Persona</button>
+        <button type="button" (click)="addPerson()" class="mt-2 bg-green-500 text-white py-2 px-4 rounded">Agregar Persona</button>
     </div>
-
+          
     <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded hover:bg-blue-600">Crear Tarea</button>
 </form>

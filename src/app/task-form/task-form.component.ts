@@ -20,25 +20,38 @@ export class TaskFormComponent {
       nameTask: ['', Validators.required],
       limitDate: ['', Validators.required],
       completed: [false],
-      people: this.fb.array([]), // Cambia aquí
+      people: this.fb.array([]),
     });
   }
 
   get people(): FormArray {
-    return this.taskForm.get('people') as FormArray; // Acceso al FormArray
+    return this.taskForm.get('people') as FormArray;
   }
 
   addPerson() {
     const personForm = this.fb.group({
       namePerson: ['', Validators.required],
       age: ['', [Validators.required, Validators.min(18)]],
-      habilities: ['', Validators.required],
+      habilities: this.fb.array([]),
     });
-    this.people.push(personForm); // Agrega un nuevo FormGroup para la persona
+    this.people.push(personForm);
+  }
+  
+  addHability(personIndex: number) {
+    const habilities = this.getHabilities(personIndex);
+    habilities.push(this.fb.control('', Validators.required));
   }
 
   removePerson(index: number) {
-    this.people.removeAt(index); // Elimina la persona del FormArray
+    this.people.removeAt(index);
+  }
+
+  getHabilities(personIndex: number): FormArray {
+    return this.people.at(personIndex).get('habilities') as FormArray;
+  }
+
+  removeHability(personIndex: number, habilityIndex: number) {
+    this.getHabilities(personIndex).removeAt(habilityIndex);
   }
 
   onSubmit() {
