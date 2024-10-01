@@ -1,50 +1,64 @@
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="max-w-md mx-auto p-4 bg-white shadow-md rounded">
-    <h2 class="text-2xl font-bold mb-6 text-center">Crea una nueva tarea</h2>
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Crea una nueva tarea</h2>
 
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Tarea:</label>
-      <input formControlName="nameTask" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
-      <div *ngIf="taskForm.get('nameTask')?.invalid && taskForm.get('nameTask')?.touched" class="text-red-600 text-sm">
-        El nombre de la tarea es obligatorio.
-      </div>
+    <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700">Tarea:</label>
+        <input formControlName="nameTask" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 transition duration-200 ease-in-out" />
+        <div *ngIf="taskForm.get('nameTask')?.invalid && taskForm.get('nameTask')?.touched" class="text-red-600 text-sm mt-1">
+            El nombre de la tarea es obligatorio.
+        </div>
     </div>
 
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Fecha límite:</label>
-      <input type="date" formControlName="limitDate" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
-      <div *ngIf="taskForm.get('limitDate')?.invalid && taskForm.get('limitDate')?.touched" class="text-red-600 text-sm">
-        La fecha límite es obligatoria.
-      </div>
+    <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700">Fecha límite:</label>
+        <input type="date" formControlName="limitDate" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 transition duration-200 ease-in-out" />
+        <div *ngIf="taskForm.get('limitDate')?.invalid && taskForm.get('limitDate')?.touched" class="text-red-600 text-sm mt-1">
+            La fecha límite es obligatoria.
+        </div>
     </div>
 
-    <div formArrayName="people" class="mb-4">
-        <h3 class="text-lg font-semibold mb-2">Personas Asignadas:</h3>
-        <div *ngFor="let person of people.controls; let i = index" [formGroupName]="i" class="border p-4 mb-2 rounded-md">
+    <div formArrayName="people" class="mb-6">
+        <h3 class="text-lg font-semibold mb-2 text-gray-800">Personas Asignadas:</h3>
+
+        <div *ngIf="people.errors?.['duplicateNames']" class="text-red-600 text-sm mt-1">
+            No se pueden asignar personas con el mismo nombre más de una vez.
+        </div>
+
+        <div *ngFor="let person of people.controls; let i = index" [formGroupName]="i" class="border p-4 mb-4 rounded-md shadow-sm bg-gray-50">
             <label class="block text-sm font-medium text-gray-700">Nombre de la Persona:</label>
-            <input formControlName="namePerson" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
-            <div *ngIf="person.get('namePerson')?.invalid && person.get('namePerson')?.touched" class="text-red-600 text-sm">
+            <input formControlName="namePerson" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 transition duration-200 ease-in-out" />
+            <div *ngIf="person.get('namePerson')?.invalid && person.get('namePerson')?.touched" class="text-red-600 text-sm mt-1">
                 El nombre de la persona es obligatorio.
             </div>
-    
+            <div *ngIf="person.get('namePerson')?.errors?.['minlength']" class="text-red-600 text-sm mt-1">
+                El nombre de la persona debe tener al menos 5 caracteres.
+            </div>
+
             <label class="block text-sm font-medium text-gray-700 mt-4">Edad:</label>
-            <input type="number" formControlName="age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
-            <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched" class="text-red-600 text-sm">
+            <input type="number" formControlName="age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 transition duration-200 ease-in-out" />
+            <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched" class="text-red-600 text-sm mt-1">
                 La edad debe ser mayor o igual a 18.
             </div>
 
-            <div formArrayName="habilities" class="mb-4">
+            <div formArrayName="habilities" class="mb-4 mt-4">
                 <h4 class="text-md font-semibold mb-2">Habilidades:</h4>
-                <div *ngFor="let hability of getHabilities(i).controls; let j = index" class="mb-2">
-                    <input [formControlName]="j" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200" />
-                    <button type="button" (click)="removeHability(i, j)" class="mt-1 text-red-600 hover:text-red-800">Eliminar Habilidad</button>
-                </div>
-                <button type="button" (click)="addHability(i)" class="mt-2 bg-green-500 text-white py-2 px-4 rounded">Agregar Habilidad</button>
+                <div *ngFor="let hability of getHabilities(i).controls; let j = index" class="mb-2 flex items-center">
+                    <input [formControlName]="j" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 transition duration-200 ease-in-out" />
+                    <button type="button" (click)="removeHability(i, j)" class="ml-2 text-red-600 hover:text-red-800">
+                        <span class="material-icons">delete</span>
+                    </button>
+                </div>                
+                <button type="button" (click)="addHability(i)" class="mt-2 bg-yellow-600 text-white py-2 px-4 rounded hover:bg-yellow-700 transition duration-200 ease-in-out">Agregar Habilidad</button>
             </div>
+
+            <button type="button" (click)="removePerson(i)" class="mt-2 text-red-600 hover:text-red-800 flex items-center">
+                <span class="material-icons">delete</span>
+                <span class="ml-1">Eliminar Persona</span>
+            </button>
             
-            <button type="button" (click)="removePerson(i)" class="mt-2 text-red-600 hover:text-red-800">Eliminar Persona</button>
         </div>
-        <button type="button" (click)="addPerson()" class="mt-2 bg-green-500 text-white py-2 px-4 rounded">Agregar Persona</button>
+        <button type="button" (click)="addPerson()" class="mt-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 ease-in-out">Agregar Persona</button>
     </div>
-          
-    <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded hover:bg-blue-600">Crear Tarea</button>
+
+    <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded hover:bg-blue-600 transition duration-200 ease-in-out">Crear Tarea</button>
 </form>
